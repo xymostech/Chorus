@@ -7,14 +7,12 @@ function chorus_obj() {
 	
 }
 //Session objects, event emmitter
-function session_obj() {
-	
-}
+function session_obj() { }
 session_obj.prototype.__proto__ = events.EventEmitter.prototype;
 
 var capture = new session_obj();
 
-tcp_tracker.on('start', function (session) {
+/*tcp_tracker.on('start', function (session) {
 	//console.log('START: ' + session.src_name + '->' + session.dst_name);
 	
 });
@@ -24,12 +22,13 @@ tcp_tracker.on('end', function (session) {
 });
 tcp_tracker.on('http error', function (session) {
 	
-});
+});*/
 
 
 pcap_session.on('packet', function (raw_packet) {
 	var packet = pcap.decode.packet(raw_packet);
-	tcp_tracker.track_packet(packet);
+	capture.emit('capture', packet);
+	//tcp_tracker.track_packet(packet);
 });
 
 module.exports = capture;
