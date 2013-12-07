@@ -7,7 +7,9 @@ function chorus_obj() {
 	
 }
 //Session objects, event emmitter
-function session_obj() { }
+function session_obj() {
+	this.pcap_session = pcap_session;
+}
 session_obj.prototype.__proto__ = events.EventEmitter.prototype;
 
 var capture = new session_obj();
