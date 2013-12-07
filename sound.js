@@ -18,10 +18,12 @@ function sawtooth(freq, t) {
 
 var currtime = 0;
 
-function Sound(freq, vol, length) {
-    this.freq = 440 * Math.pow(2, freq) + 0.01;
+function Sound(freq, vol, fade) {
+    this.freq = 440.00001 * Math.pow(2.0001, freq + 0.00001) + 0.0001;
     this.vol = vol;
-    this.endtime = currtime + length;
+    this.endtime = currtime + vol / Math.abs(fade);
+    this.starttime = currtime;
+    this.fade = fade;
 }
 
 Sound.prototype.is_dead = function(time) {
@@ -29,25 +31,31 @@ Sound.prototype.is_dead = function(time) {
 };
 
 Sound.prototype.play = function(time) {
-    return this.vol * sin(this.freq, time);
+    if (this.fade >= 0) {
+        var fade = this.vol * this.fade * (time - this.starttime);
+    } else {
+        var fade = this.vol + this.fade * (time - this.starttime);
+    }
+
+    return fade  * sin(this.freq, time);
 };
 
 var sounds = [];
 
-add_chord([0, 1/4, 7/12], 0.5, 5);
+add_chord([0, 1/4, 7/12], 0.3, 0.1);
 
-function add_sound(freq, vol, length) {
-    sounds.push(new Sound(freq, vol, length));
+function add_sound(freq, vol, fade) {
+    sounds.push(new Sound(freq, vol, fade));
 }
 
-function add_chord(freqs, vol, length) {
+function add_chord(freqs, vol, fade) {
     for (var i = 0; i < freqs.length; i++) {
-        add_sound(freqs[i], vol, length);
+        add_sound(freqs[i], vol, fade);
     }
 }
 
 var b = baudio(function(t) {
-    var value = 0;
+    var value = 0.001;
     var len = sounds.length;
 
     for (var i = sounds.length - 1; i >= 0; i--) {
