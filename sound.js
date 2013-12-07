@@ -74,6 +74,6 @@ module.exports = {
     run: function() {
         b.play();
     },
-    addSound: function(sound) {
+    add_sound: function(sound) {
     }
 };
