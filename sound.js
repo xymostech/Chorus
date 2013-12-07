@@ -31,18 +31,14 @@ Sound.prototype.is_dead = function(time) {
 };
 
 Sound.prototype.play = function(time) {
-    if (this.fade >= 0) {
-        var fade = this.vol * this.fade * (time - this.starttime);
-    } else {
-        var fade = this.vol + this.fade * (time - this.starttime);
-    }
+    var fade = Math.pow(Math.abs(this.fade), time - this.starttime);
 
-    return fade  * sin(this.freq, time);
+    fade = this.fade > 0 ? 1 - fade : fade;
+
+    return this.vol * fade * sin(this.freq, time);
 };
 
 var sounds = [];
-
-add_chord([0, 1/4, 7/12], 0.3, 0.1);
 
 function add_sound(freq, vol, fade) {
     sounds.push(new Sound(freq, vol, fade));
@@ -74,6 +70,5 @@ module.exports = {
     run: function() {
         b.play();
     },
-    add_sound: function(sound) {
-    }
+    add_sound: add_sound
 };
