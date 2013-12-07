@@ -1,3 +1,3 @@
-var sound = require('sound'), capture = require('capture');
+var sound = require('./sound'), capture = require('./capture');
 
 capture.on('capture', sound.addSound);

@@ -31,3 +31,5 @@ pcap_session.on('packet', function (raw_packet) {
 	var packet = pcap.decode.packet(raw_packet);
 	tcp_tracker.track_packet(packet);
 });
+
+module.exports = capture;
